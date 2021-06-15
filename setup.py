@@ -8,7 +8,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name="SimplePPT",
+    name="simpleppt",
     version_format="{tag}",
     setup_requires=["setuptools-git-version"],
     description="Python implementation of SimplePPT algorithm, with GPU acceleration",
@@ -18,7 +18,7 @@ setup(
     author="Louis Faure",
     author_email="",
     packages=find_packages(),
-    package_dir={"SimplePPT": "SimplePPT"},
+    package_dir={"simpleppt": "simpleppt"},
     install_requires=requirements,
     zip_safe=False,
 )
