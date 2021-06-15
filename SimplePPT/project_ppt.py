@@ -1,23 +1,8 @@
 import numpy as np
-import pandas as pd
 import igraph
-from anndata import AnnData
 import matplotlib.collections
-from typing import Union, Optional, Sequence, Tuple, List
-import plotly.graph_objects as go
-import scanpy as sc
-from cycler import Cycler
-
-from pandas.api.types import is_categorical_dtype
-from scanpy.plotting._utils import savefig_or_show
-import types
-
+from typing import Optional
 import matplotlib.pyplot as plt
-from matplotlib.backend_bases import GraphicsContextBase, RendererBase
-from matplotlib.cm import ScalarMappable
-from matplotlib.colors import Normalize
-from numba import njit
-import math
 
 def project_ppt(
     ppt,

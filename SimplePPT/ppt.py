@@ -1,18 +1,14 @@
 from typing import Optional, Union
-from anndata import AnnData
 import numpy as np
-import pandas as pd
 from pandas import DataFrame
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import minimum_spanning_tree
-from scipy.sparse.csgraph import shortest_path
 import igraph
 from tqdm import tqdm
 import sys
 
 from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
 from . import logging as logg
-from . import settings
 
 def ppt(
     X,
