@@ -1,0 +1,9 @@
+numba==0.52.0
+tqdm==4.60.0
+scipy==1.4.1
+pandas==1.2.4
+importlib_metadata==4.0.1
+numpy==1.19.5
+matplotlib==3.4.2
+python_igraph==0.9.6
+scikit_learn==0.24.2
