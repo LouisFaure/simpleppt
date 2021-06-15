@@ -24,4 +24,4 @@ jobs:
         pip install .
     - name: Load package
       run: |
-        python -c "import sys; sys.path = sys.path[1:];import SimplePPT"
+        python -c "import sys; sys.path = sys.path[1:];import simpleppt"
