@@ -9,6 +9,7 @@ import sys
 
 from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
 from . import logging as logg
+from . import settings
 
 def ppt(
     X,
