@@ -10,6 +10,9 @@ import igraph
 from tqdm import tqdm
 import sys
 
+from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
+from . import logging as logg
+from . import settings
 
 def ppt(
     X,
@@ -23,6 +26,7 @@ def ppt(
     device: str = "cpu",
     gpu_tbp: int = 16,
     seed: Optional[int] = None,
+    progress: bool = True,
 ):
 
     X_t = X.values.T
@@ -53,7 +57,7 @@ def ppt(
             F_mat_gpu = cp.asarray(init.T)
             M = init.T.shape[0]
 
-        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting")
+        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting", disable=~progress)
         for i in iterator:
             R = pairwise_distances(X_gpu.T, F_mat_gpu.T, metric=metric)
 
@@ -142,7 +146,7 @@ def ppt(
         err = 100
 
         # while ((j <= nsteps) & (err > err_cut)):
-        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting")
+        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting",disable=~progress)
         for i in iterator:
             R = pairwise_distances(X_cpu.T, F_mat_cpu.T, metric=metric)
 
@@ -216,7 +220,7 @@ def ppt(
 
     g = igraph.Graph.Adjacency((ppt["B"] > 0).tolist(), mode="undirected")
 
-    # remvoe lonely nodes
+    # remove lonely nodes
     co_nodes = np.argwhere(np.array(g.degree()) > 0).ravel()
     ppt["R"] = ppt["R"][:, co_nodes]
     ppt["F"] = ppt["F"][:, co_nodes]
@@ -234,14 +238,4 @@ def ppt(
     if len(ppt["tips"]) > 30:
         logg.info("    more than 30 tips detected!")
 
-    graph = {
-        "B": ppt["B"],
-        "R": ppt["R"],
-        "F": ppt["F"],
-        "tips": ppt["tips"],
-        "forks": ppt["forks"],
-        "cells_fitted": X.index.tolist(),
-        "metrics": ppt["metric"],
-    }
-
-    return {"graph": graph, "ppt": ppt}
+    return ppt

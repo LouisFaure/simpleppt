@@ -12,6 +12,7 @@ from pandas.api.types import is_categorical_dtype
 from scanpy.plotting._utils import savefig_or_show
 import types
 
+import matplotlib.pyplot as plt
 from matplotlib.backend_bases import GraphicsContextBase, RendererBase
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
@@ -19,16 +20,14 @@ from numba import njit
 import math
 
 def project_ppt(
-    graph,
+    ppt,
     emb,
     size_nodes: float = None,
-    color_cells: Union[str, None] = None,
-    tips: bool = True,
-    forks: bool = True,
-    nodes: Optional[List] = [],
-    ax=None,
+    plot_datapoints = True,
+    alpha_seg=1,
+    alpha_nodes=1,
+    ax = None,
     show: Optional[bool] = None,
-    save: Union[str, bool, None] = None,
     **kwargs,
 ):
 
@@ -63,75 +62,34 @@ def project_ppt(
     If `show==False` a :class:`~matplotlib.axes.Axes`
     """
 
-    if "components" in kwargs:
-        cmp = np.array(kwargs["components"]) - 1
-        emb = emb[:, cmp]
 
-    else:
-        emb = emb[:, :2]
-
-    R = graph["R"]
+    R = ppt["R"]
 
     proj = (np.dot(emb.T, R) / R.sum(axis=0)).T
 
-    B = graph["B"]
+    B = ppt["B"]
 
     if ax is None:
-        ax = sc.pl.embedding(
-            adata, color=color_cells, basis=basis, show=False, **kwargs
-        )
-    else:
-        sc.pl.embedding(
-            adata, color=color_cells, basis=basis, ax=ax, show=False, **kwargs
-        )
-
+        fig, ax = plt.subplots()
+        
+    if plot_datapoints:
+        ax.scatter(emb[:,0],emb[:,1], **kwargs)
+    
     al = np.array(
         igraph.Graph.Adjacency((B > 0).tolist(), mode="undirected").get_edgelist()
     )
     segs = al.tolist()
     vertices = proj.tolist()
     lines = [[tuple(vertices[j]) for j in i] for i in segs]
-    lc = matplotlib.collections.LineCollection(lines, colors="k", linewidths=2)
+    lc = matplotlib.collections.LineCollection(lines, colors="darkblue",alpha=alpha_seg, linewidths=2)
     ax.add_collection(lc)
+    
 
-    ax.scatter(proj[:, 0], proj[:, 1], s=size_nodes, c="k")
+    ax.scatter(proj[:, 0], proj[:, 1], s=size_nodes, c="k",alpha=alpha_nodes)
 
     bbox = dict(facecolor="white", alpha=0.6, edgecolor="white", pad=0.1)
 
-    if tips:
-        for tip in graph["tips"]:
-            ax.annotate(
-                tip,
-                (proj[tip, 0], proj[tip, 1]),
-                ha="center",
-                va="center",
-                xytext=(-8, 8),
-                textcoords="offset points",
-                bbox=bbox,
-            )
-    if forks:
-        for fork in graph["forks"]:
-            ax.annotate(
-                fork,
-                (proj[fork, 0], proj[fork, 1]),
-                ha="center",
-                va="center",
-                xytext=(-8, 8),
-                textcoords="offset points",
-                bbox=bbox,
-            )
-    if nodes:
-        for node in nodes:
-            ax.annotate(
-                node,
-                (proj[node, 0], proj[node, 1]),
-                ha="center",
-                va="center",
-                xytext=(-8, 8),
-                textcoords="offset points",
-                bbox=bbox,
-            )
     if show == False:
         return ax
-
-    savefig_or_show("graph", show=show, save=save)
+    else:
+        plt.show()
