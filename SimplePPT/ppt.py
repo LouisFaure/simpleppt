@@ -25,6 +25,22 @@ def ppt(
     progress: bool = True,
 ):
 
+    logg.info(
+        "inferring a principal tree",
+        reset=True,
+        end=" " if settings.verbosity > 2 else "\n",
+    )
+    logg.hint(
+            "parameters used \n"
+            "    "
+            + str(Nodes)
+            + " principal points, sigma = "
+            + str(sigma)
+            + ", lambda = "
+            + str(lam)
+            + ", metric = "
+            + metric
+        )
     X_t = X.values.T
 
     # if seed is not None:
@@ -200,7 +216,7 @@ def ppt(
         ]
 
     names = [
-        "cells_fitted",
+        "data_fitted",
         "score",
         "F",
         "R",
@@ -233,5 +249,5 @@ def ppt(
 
     if len(ppt["tips"]) > 30:
         logg.info("    more than 30 tips detected!")
-
+    logg.info("    finished", time=True, end=" " if settings.verbosity > 2 else "\n")
     return ppt
