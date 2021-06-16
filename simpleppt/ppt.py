@@ -10,6 +10,7 @@ import sys
 from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
 from . import logging as logg
 from . import settings
+from .SimplePPT import SimplePPT
 
 
 def ppt(
@@ -26,6 +27,69 @@ def ppt(
     seed: Optional[int] = None,
     progress: bool = True,
 ):
+
+    """\
+    Generate a principal tree.
+    Learn a simplified representation on any space, compsed of nodes, approximating the
+    position of the cells on a given space such as gene expression, pca, diffusion maps, ...
+    If `method=='ppt'`, uses simpleppt implementation from [Soldatov19]_.
+    If `method=='epg'`, uses Elastic Principal Graph approach from [Albergante20]_.
+    Parameters
+    ----------
+    X
+        n-dimensionnal matrix to be learned.
+    Nodes
+        Number of nodes composing the principial tree.
+    init
+        Initialise the point positions.
+    sigma
+        Regularization parameter.
+    lam
+        Penalty for the tree length.
+    metric
+        The metric to use to compute distances in high dimensional space.
+        For compatible metrics, check the documentation of
+        sklearn.metrics.pairwise_distances if using cpu or
+        cuml.metrics.pairwise_distances if using gpu.
+    nsteps
+        Number of steps for the optimisation process.
+    err_cut
+        Stop algorithm if proximity of principal points between iterations less than defined value.
+    gpu_tpb
+        Threads per block parameter for cuda computations.
+    seed
+        A numpy random seed.
+    progress
+        Show progressbar of the tree learning.
+
+    Returns
+    SP = SimplePPT(F,
+                   R,
+                   B,
+                   L,
+                   d,
+                   score,
+                   lam,
+                   sigma,
+                   nsteps,
+                   metric)
+
+    -------
+    SP : simpleppt.SimplePPT object with the following fields:
+
+        `.F`
+            coordinates of principal points in the learned space.
+        `.R`
+            soft assignment of datapoints to principal points.
+        `.B`
+            adjacency matrix of the principal points.
+        `.L`
+            Laplacian matrix.
+        `.d`
+            Pairwise distance matrix of principal points.
+        `.score`
+
+    """
 
     logg.info(
         "inferring a principal tree",
@@ -130,18 +194,13 @@ def ppt(
             ]
         )
 
-        ppt = [
-            cp.asnumpy(score),
-            cp.asnumpy(F_mat_gpu),
-            cp.asnumpy(R),
-            cp.asnumpy(B),
-            cp.asnumpy(L),
-            cp.asnumpy(d),
-            lam,
-            sigma,
-            nsteps,
-            metric,
-        ]
+        score = cp.asnumpy(score)
+        F = cp.asnumpy(F_mat_gpu)
+        R = cp.asnumpy(R)
+        B = (cp.asnumpy(B),)
+        L = (cp.asnumpy(L),)
+        d = cp.asnumpy(d)
+
     else:
         from sklearn.metrics import pairwise_distances
         from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
@@ -212,52 +271,27 @@ def ppt(
             lam / 2 * np.sum(d * B),
         ]
 
-        ppt = [
-            score,
-            F_mat_cpu,
-            R,
-            B,
-            L,
-            d,
-            lam,
-            sigma,
-            nsteps,
-            metric,
-        ]
+        F = F_mat_cpu
 
-    names = [
-        "score",
-        "F",
-        "R",
-        "B",
-        "L",
-        "d",
-        "lambda",
-        "sigma",
-        "nsteps",
-        "metric",
-    ]
-    ppt = dict(zip(names, ppt))
+    SP = SimplePPT(F, R, B, L, d, score, lam, sigma, nsteps, metric)
 
-    g = igraph.Graph.Adjacency((ppt["B"] > 0).tolist(), mode="undirected")
+    g = igraph.Graph.Adjacency((SP.B > 0).tolist(), mode="undirected")
 
     # remove lonely nodes
     co_nodes = np.argwhere(np.array(g.degree()) > 0).ravel()
-    ppt["R"] = ppt["R"][:, co_nodes]
-    ppt["F"] = ppt["F"][:, co_nodes]
-    ppt["B"] = ppt["B"][co_nodes, :][:, co_nodes]
-    ppt["L"] = ppt["L"][co_nodes, :][:, co_nodes]
-    ppt["d"] = ppt["d"][co_nodes, :][:, co_nodes]
+    SP.R = SP.R[:, co_nodes]
+    SP.F = SP.F[:, co_nodes]
+    SP.B = SP.B[co_nodes, :][:, co_nodes]
+    SP.L = SP.L[co_nodes, :][:, co_nodes]
+    SP.d = SP.d[co_nodes, :][:, co_nodes]
 
     if len(co_nodes) < Nodes:
         logg.info("    " + str(Nodes - len(co_nodes)) + " lonely nodes removed")
 
-    g = igraph.Graph.Adjacency((ppt["B"] > 0).tolist(), mode="undirected")
-    ppt["tips"] = np.argwhere(np.array(g.degree()) == 1).flatten()
-    ppt["forks"] = np.argwhere(np.array(g.degree()) > 2).flatten()
+    SP.set_tips_forks()
 
-    if len(ppt["tips"]) > 30:
+    if len(SP.tips) > 30:
         logg.info("    more than 30 tips detected!")
     logg.info("    finished", time=True, end=" " if settings.verbosity > 2 else "\n")
 
-    return ppt
+    return SP

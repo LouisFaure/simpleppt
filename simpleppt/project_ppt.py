@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 def project_ppt(
-    ppt,
+    SP,
     emb,
     size_nodes: float = None,
     plot_datapoints=True,
@@ -21,38 +21,32 @@ def project_ppt(
     Project principal graph onto embedding.
     Parameters
     ----------
-    adata
-        Annotated data matrix.
-    basis
-        Name of the `obsm` basis to use.
+    SP
+        SimplePPT object.
+    emb
+        embedding to project the tree onto.
     size_nodes
         size of the projected prinicpal points.
-    color_cells
-        cells color
-    tips
-        display tip ids.
-    forks
-        display fork ids.
-    nodes
-        display any node id.
+    alpha_seg
+        segment alpha
+    alpha_nodes
+        node alpha.
     ax
         Add plot to existing ax
     show
         show the plot.
-    save
-        save the plot.
     kwargs
-        arguments to pass to scanpy functions pl.embedding
+        arguments to pass to scanpy functions plt.scatter
     Returns
     -------
     If `show==False` a :class:`~matplotlib.axes.Axes`
     """
 
-    R = ppt["R"]
+    R = SP.R
 
     proj = (np.dot(emb.T, R) / R.sum(axis=0)).T
 
-    B = ppt["B"]
+    B = SP.B
 
     if ax is None:
         fig, ax = plt.subplots()

@@ -8,3 +8,4 @@ del version
 
 from .ppt import ppt
 from .project_ppt import project_ppt
+from .SimplePPT import SimplePPT
