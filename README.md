@@ -12,7 +12,7 @@ Mao et al. (2015), SimplePPT: A simple principal tree algorithm, SIAM Internatio
 GPU dependencies (optional)
 ---------------------------
 
-If you have a nvidia GPU, scFates can leverage CUDA computations for speedup in tree inference. The latest version of rapids framework is required (at least 0.17) it is recommanded to create a new conda environment:
+If you have a nvidia GPU, simpleppt can leverage CUDA computations for speedup in tree inference. The latest version of rapids framework is required (at least 0.17) it is recommanded to create a new conda environment:
 
     conda create -n SimplePPT-gpu -c rapidsai -c nvidia -c conda-forge -c defaults \
         rapids=0.19 python=3.8 cudatoolkit=11.0 -y
