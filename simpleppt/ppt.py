@@ -11,6 +11,7 @@ from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
 from . import logging as logg
 from . import settings
 
+
 def ppt(
     X,
     Nodes: int = None,
@@ -32,16 +33,16 @@ def ppt(
         end=" " if settings.verbosity > 2 else "\n",
     )
     logg.hint(
-            "parameters used \n"
-            "    "
-            + str(Nodes)
-            + " principal points, sigma = "
-            + str(sigma)
-            + ", lambda = "
-            + str(lam)
-            + ", metric = "
-            + metric
-        )
+        "parameters used \n"
+        "    "
+        + str(Nodes)
+        + " principal points, sigma = "
+        + str(sigma)
+        + ", lambda = "
+        + str(lam)
+        + ", metric = "
+        + metric
+    )
     X_t = X.T
 
     # if seed is not None:
@@ -70,7 +71,12 @@ def ppt(
             F_mat_gpu = cp.asarray(init.T)
             M = init.T.shape[0]
 
-        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting",disable=progress==False)
+        iterator = tqdm(
+            range(nsteps),
+            file=sys.stdout,
+            desc="    fitting",
+            disable=progress == False,
+        )
         for i in iterator:
             R = pairwise_distances(X_gpu.T, F_mat_gpu.T, metric=metric)
 
@@ -158,7 +164,12 @@ def ppt(
         err = 100
 
         # while ((j <= nsteps) & (err > err_cut)):
-        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting",disable=progress==False)
+        iterator = tqdm(
+            range(nsteps),
+            file=sys.stdout,
+            desc="    fitting",
+            disable=progress == False,
+        )
         for i in iterator:
             R = pairwise_distances(X_cpu.T, F_mat_cpu.T, metric=metric)
 
@@ -248,5 +259,5 @@ def ppt(
     if len(ppt["tips"]) > 30:
         logg.info("    more than 30 tips detected!")
     logg.info("    finished", time=True, end=" " if settings.verbosity > 2 else "\n")
-    
+
     return ppt

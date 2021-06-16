@@ -4,6 +4,7 @@ import math
 from scipy import sparse
 import numpy as np
 
+
 @cuda.jit
 def process_R_gpu(R, sigma):
     x, y = cuda.grid(2)

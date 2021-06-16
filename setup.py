@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 from os import path
+
 this_directory = path.abspath(path.dirname(__file__))
 with open("requirements.txt") as f:
     requirements = f.read().splitlines()

@@ -4,14 +4,15 @@ import matplotlib.collections
 from typing import Optional
 import matplotlib.pyplot as plt
 
+
 def project_ppt(
     ppt,
     emb,
     size_nodes: float = None,
-    plot_datapoints = True,
+    plot_datapoints=True,
     alpha_seg=1,
     alpha_nodes=1,
-    ax = None,
+    ax=None,
     show: Optional[bool] = None,
     **kwargs,
 ):
@@ -47,7 +48,6 @@ def project_ppt(
     If `show==False` a :class:`~matplotlib.axes.Axes`
     """
 
-
     R = ppt["R"]
 
     proj = (np.dot(emb.T, R) / R.sum(axis=0)).T
@@ -56,21 +56,22 @@ def project_ppt(
 
     if ax is None:
         fig, ax = plt.subplots()
-        
+
     if plot_datapoints:
-        ax.scatter(emb[:,0],emb[:,1], **kwargs)
-    
+        ax.scatter(emb[:, 0], emb[:, 1], **kwargs)
+
     al = np.array(
         igraph.Graph.Adjacency((B > 0).tolist(), mode="undirected").get_edgelist()
     )
     segs = al.tolist()
     vertices = proj.tolist()
     lines = [[tuple(vertices[j]) for j in i] for i in segs]
-    lc = matplotlib.collections.LineCollection(lines, colors="darkblue",alpha=alpha_seg, linewidths=2)
+    lc = matplotlib.collections.LineCollection(
+        lines, colors="darkblue", alpha=alpha_seg, linewidths=2
+    )
     ax.add_collection(lc)
-    
 
-    ax.scatter(proj[:, 0], proj[:, 1], s=size_nodes, c="k",alpha=alpha_nodes)
+    ax.scatter(proj[:, 0], proj[:, 1], s=size_nodes, c="k", alpha=alpha_nodes)
 
     bbox = dict(facecolor="white", alpha=0.6, edgecolor="white", pad=0.1)
 
