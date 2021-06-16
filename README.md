@@ -6,10 +6,33 @@
 Python implementation of [SimplePPT algorithm](https://doi.org/10.1137/1.9781611974010.89), with GPU acceleration.
 
 Please cite the following paper if you use it:
-
 ```
 Mao et al. (2015), SimplePPT: A simple principal tree algorithm, SIAM International Conference on Data Mining.
 ```
+
+Installation
+------------
+
+```bash
+pip install -U simpleppt
+```
+
+Usage
+-----
+
+```python
+from sklearn.datasets import make_classification
+import simpleppt
+
+X1, Y1 = make_classification(n_features=2, n_redundant=0, n_informative=2,
+                             n_clusters_per_class=1, n_classes=3)
+
+ppt=simpleppt.ppt(X1,Nodes=30,seed=1,progress=False,lam=10)
+simpleppt.project_ppt(ppt,X1, c=Y1)
+```
+
+![result](./ppt.png)
+
 
 GPU dependencies (optional)
 ---------------------------
