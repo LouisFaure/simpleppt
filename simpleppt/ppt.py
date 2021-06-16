@@ -42,7 +42,7 @@ def ppt(
             + ", metric = "
             + metric
         )
-    X_t = X.values.T
+    X_t = X.T
 
     # if seed is not None:
     #    np.random.seed(seed)
@@ -70,7 +70,7 @@ def ppt(
             F_mat_gpu = cp.asarray(init.T)
             M = init.T.shape[0]
 
-        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting", disable=~progress)
+        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting",disable=progress==False)
         for i in iterator:
             R = pairwise_distances(X_gpu.T, F_mat_gpu.T, metric=metric)
 
@@ -125,7 +125,6 @@ def ppt(
         )
 
         ppt = [
-            X.index.tolist(),
             cp.asnumpy(score),
             cp.asnumpy(F_mat_gpu),
             cp.asnumpy(R),
@@ -159,7 +158,7 @@ def ppt(
         err = 100
 
         # while ((j <= nsteps) & (err > err_cut)):
-        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting",disable=~progress)
+        iterator = tqdm(range(nsteps), file=sys.stdout, desc="    fitting",disable=progress==False)
         for i in iterator:
             R = pairwise_distances(X_cpu.T, F_mat_cpu.T, metric=metric)
 
@@ -203,7 +202,6 @@ def ppt(
         ]
 
         ppt = [
-            X.index.tolist(),
             score,
             F_mat_cpu,
             R,
@@ -217,7 +215,6 @@ def ppt(
         ]
 
     names = [
-        "data_fitted",
         "score",
         "F",
         "R",
@@ -251,4 +248,5 @@ def ppt(
     if len(ppt["tips"]) > 30:
         logg.info("    more than 30 tips detected!")
     logg.info("    finished", time=True, end=" " if settings.verbosity > 2 else "\n")
+    
     return ppt
