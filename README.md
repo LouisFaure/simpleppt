@@ -1,4 +1,6 @@
+[![PyPI](https://img.shields.io/pypi/v/simpleppt.svg)](https://pypi.python.org/pypi/simpleppt/)
 [![Install & Load](https://github.com/LouisFaure/simpleppt/actions/workflows/install.yml/badge.svg)](https://github.com/LouisFaure/simpleppt/actions/workflows/install.yml)
+[![GitHub license](https://img.shields.io/github/license/LouisFaure/simpleppt)](https://github.com/LouisFaure/simpleppt/blob/master/LICENSE)
 
 # SimplePPT
 Python implementation of [SimplePPT algorithm](https://doi.org/10.1137/1.9781611974010.89), with GPU acceleration.
