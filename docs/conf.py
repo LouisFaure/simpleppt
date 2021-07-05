@@ -28,7 +28,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 sys.path.insert(0, f"{HERE.parent}")
 
-import dyntrack
+import simpleppt
 
 
 # -- Project information -----------------------------------------------------
@@ -38,7 +38,7 @@ author = "Louis Faure"
 copyright = f"{datetime.now():%Y}, {author}"
 
 
-version = "v1.0"  # simpleppt.__version__  #'0.1.3' #
+version = simpleppt.__version__
 # The full version, including alpha/beta/rc tags.
 release = version
 

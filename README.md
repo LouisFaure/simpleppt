@@ -1,5 +1,7 @@
 [![PyPI](https://img.shields.io/pypi/v/simpleppt.svg)](https://pypi.python.org/pypi/simpleppt/)
-[![Install & Load](https://github.com/LouisFaure/simpleppt/actions/workflows/install.yml/badge.svg)](https://github.com/LouisFaure/simpleppt/actions/workflows/install.yml)
+[![Documentation Status](https://readthedocs.org/projects/simpleppt/badge/?version=latest)](https://simpleppt.readthedocs.io/en/latest/?badge=latest)
+[![Build & Test](https://github.com/LouisFaure/simpleppt/actions/workflows/test.yml/badge.svg)](https://github.com/LouisFaure/simpleppt/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/LouisFaure/simpleppt/branch/main/graph/badge.svg)](https://codecov.io/gh/LouisFaure/simpleppt)
 [![GitHub license](https://img.shields.io/github/license/LouisFaure/simpleppt)](https://github.com/LouisFaure/simpleppt/blob/master/LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
