@@ -76,13 +76,34 @@ class SimplePPT:
         return descr
 
     def set_tips_forks(self):
-        """Obtains the tips and forks of the tree."""
+        """Obtains the tips and forks of the tree.
+
+        Returns
+        -------
+        adds to SimplePPT object the following fields: :class:`simpleppt.SimplePPT`
+
+            `.tips`
+                Node IDs of the tree that have degree 1..
+            `.forks`
+                Node IDs of the tree that have a degree of more than 1.
+
+        """
         g = igraph.Graph.Adjacency((self.B > 0).tolist(), mode="undirected")
         self.tips = np.argwhere(np.array(g.degree()) == 1).flatten()
         self.forks = np.argwhere(np.array(g.degree()) > 2).flatten()
 
     def set_branches(self, root=None):
-        """Assign branches/segments to datapoints."""
+        """Assign branches/segments to nodes.
+
+        Returns
+        -------
+        adds to SimplePPT object the following fields: :class:`simpleppt.SimplePPT`
+
+            `.pp_info`
+                Per node ID info of distance from the root, and segment assigment.
+            `.pp_seg`
+                Per segment info with node ID extremities and distance.
+        """
         root = self.tips[0] if root is None else root
         d = 1e-6 + pairwise_distances(self.F.T, self.F.T, metric=self.metric)
 
