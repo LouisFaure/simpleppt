@@ -1,0 +1,6 @@
+importlib_metadata
+sphinx_rtd_theme
+sphinx-autodoc-typehints
+readthedocs-sphinx-ext
+docutils
+matplotlib

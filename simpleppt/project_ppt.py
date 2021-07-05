@@ -19,6 +19,7 @@ def project_ppt(
 
     """\
     Project principal graph onto embedding.
+
     Parameters
     ----------
     SP
@@ -37,6 +38,7 @@ def project_ppt(
         show the plot.
     kwargs
         arguments to pass to scanpy functions plt.scatter
+
     Returns
     -------
     If `show==False` a :class:`~matplotlib.axes.Axes`

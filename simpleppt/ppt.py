@@ -30,10 +30,10 @@ def ppt(
 
     """\
     Generate a principal tree.
-    Learn a simplified representation on any space, compsed of nodes, approximating the
-    position of the cells on a given space such as gene expression, pca, diffusion maps, ...
-    If `method=='ppt'`, uses simpleppt implementation from [Soldatov19]_.
-    If `method=='epg'`, uses Elastic Principal Graph approach from [Albergante20]_.
+
+    Learn a simplified representation on any space, composed of nodes, approximating the
+    position of the datapoints on a given space.
+
     Parameters
     ----------
     X
@@ -63,19 +63,8 @@ def ppt(
         Show progressbar of the tree learning.
 
     Returns
-    SP = SimplePPT(F,
-                   R,
-                   B,
-                   L,
-                   d,
-                   score,
-                   lam,
-                   sigma,
-                   nsteps,
-                   metric)
-
     -------
-    SP : simpleppt.SimplePPT object with the following fields:
+    SimplePPT object with the following fields: :class:`simpleppt.SimplePPT`
 
         `.F`
             coordinates of principal points in the learned space.
@@ -88,6 +77,7 @@ def ppt(
         `.d`
             Pairwise distance matrix of principal points.
         `.score`
+            Score minimized during the tree learning.
 
     """
 

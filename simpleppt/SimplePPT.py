@@ -10,6 +10,34 @@ import itertools
 
 
 class SimplePPT:
+    """A python object containing the data used for dynamical tracks analysis.
+
+    Parameters
+    ----------
+
+    F
+        coordinates of principal points in the learned space.
+    R
+        soft assignment of datapoints to principal points.
+    B
+        adjacency matrix of the principal points.
+    L
+        Laplacian matrix.
+    d
+        Pairwise distance matrix of principal points.
+    score
+        Score minimized during the tree learning.
+    tips
+        Node IDs of the tree that have degree 1.
+    forks
+        Node IDs of the tree that have a degree of more than 1.
+    root
+        Selected node ID as the root of the tree for distance calculations.
+    pp_info
+        Per node ID info of distance from the root, and segment assigment.
+    pp_seg
+        Per segment info with node ID extremities and distance."""
+
     def __init__(
         self,
         F: np.array,
@@ -48,11 +76,13 @@ class SimplePPT:
         return descr
 
     def set_tips_forks(self):
+        """Obtains the tips and forks of the tree."""
         g = igraph.Graph.Adjacency((self.B > 0).tolist(), mode="undirected")
         self.tips = np.argwhere(np.array(g.degree()) == 1).flatten()
         self.forks = np.argwhere(np.array(g.degree()) > 2).flatten()
 
     def set_branches(self, root=None):
+        """Assign branches/segments to datapoints."""
         root = self.tips[0] if root is None else root
         d = 1e-6 + pairwise_distances(self.F.T, self.F.T, metric=self.metric)
 

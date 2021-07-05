@@ -1,0 +1,11 @@
+[run]
+branch = True
+omit =
+    simpleppt/utils.py
+    simpleppt/logging.py
+
+[report]
+exclude_lines =
+    if copy:
+    if device == "gpu":
+    except Exception as e:
