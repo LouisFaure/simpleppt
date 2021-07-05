@@ -5,11 +5,8 @@ import os
 
 
 def test_all():
-    diff = os.path.join(__path__[0], "tests", "diffusion.csv")
-    umap = os.path.join(__path__[0], "tests", "umap.csv")
 
-    data = np.loadtxt(diff, delimiter=",")
-    emb = np.loadtxt(umap, delimiter=",")
+    data, emb = simpleppt.load_example()
 
     SP = simpleppt.ppt(data, Nodes=10, seed=1)
 

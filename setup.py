@@ -23,7 +23,7 @@ setup(
     author="Louis Faure",
     author_email="",
     include_package_data=True,
-    package_data={"": ["tests/*.csv"]},
+    package_data={"": ["data/*.csv"]},
     packages=find_packages(),
     package_dir={"simpleppt": "simpleppt"},
     install_requires=requirements,
