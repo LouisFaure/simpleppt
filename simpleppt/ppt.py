@@ -6,6 +6,7 @@ from scipy.sparse.csgraph import minimum_spanning_tree
 import igraph
 from tqdm import tqdm
 import sys
+import math
 
 from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
 from . import logging as logg
@@ -187,8 +188,8 @@ def ppt(
         score = cp.asnumpy(score)
         F = cp.asnumpy(F_mat_gpu)
         R = cp.asnumpy(R)
-        B = (cp.asnumpy(B),)
-        L = (cp.asnumpy(L),)
+        B = cp.asnumpy(B)
+        L = cp.asnumpy(L)
         d = cp.asnumpy(d)
 
     else:
