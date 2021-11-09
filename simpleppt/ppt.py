@@ -16,6 +16,7 @@ from .SimplePPT import SimplePPT
 
 def ppt(
     X,
+    W=None,
     Nodes: int = None,
     init: Optional[DataFrame] = None,
     sigma: Optional[Union[float, int]] = 0.1,
@@ -39,6 +40,8 @@ def ppt(
     ----------
     X
         n-dimensionnal matrix to be learned.
+    W
+        weight matrix, having the same dimensions as X.
     Nodes
         Number of nodes composing the principial tree.
     init
@@ -113,8 +116,7 @@ def ppt(
         from .utils import process_R_gpu, norm_R_gpu, cor_mat_gpu, mst_gpu, matmul
 
         X_gpu = cp.asarray(X_t, dtype=np.float64)
-        W = cp.empty_like(X_gpu)
-        W.fill(1)
+        W = cp.ones_like(X_gpu) if W is None else cp.asarray(W.T)
 
         if init is None:
             if seed is not None:
@@ -197,8 +199,7 @@ def ppt(
         from .utils import process_R_cpu, norm_R_cpu, cor_mat_cpu
 
         X_cpu = np.asarray(X_t, dtype=np.float64)
-        W = np.empty_like(X_cpu)
-        W.fill(1)
+        W = np.ones_like(X_cpu) if W is None else W.T
 
         if init is None:
             if seed is not None:
