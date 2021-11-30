@@ -10,7 +10,7 @@ Installation
 
 .. code:: bash
 
-    pip install -U dyntrack
+    pip install -U simpleppt
 
 Usage
 -----
