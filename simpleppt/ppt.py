@@ -107,12 +107,17 @@ def ppt(
     #    np.random.seed(seed)
 
     if device == "gpu":
-        import rmm
+        try:
+            import rmm
 
-        rmm.reinitialize(managed_memory=True)
-        assert rmm.is_initialized()
-        import cupy as cp
-        from cuml.metrics import pairwise_distances
+            rmm.reinitialize(managed_memory=True)
+            assert rmm.is_initialized()
+            import cupy as cp
+            from cuml.metrics import pairwise_distances
+        except ModuleNotFoundError:
+            raise Exception(
+                "Some of the GPU dependencies are missing, use device='cpu' instead!"
+            )
         from .utils import process_R_gpu, norm_R_gpu, cor_mat_gpu, mst_gpu, matmul
 
         X_gpu = cp.asarray(X_t, dtype=np.float64)
