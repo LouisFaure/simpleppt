@@ -139,16 +139,22 @@ class SimplePPT:
                 fro = fromto[np.argmin(path_root)]
                 to = fromto[np.argmax(path_root)]
                 pp_info.loc[paths12, "seg"] = pp_seg.shape[0] + 1
-                pp_seg = pp_seg.append(
-                    pd.DataFrame(
-                        {
-                            "n": pp_seg.shape[0] + 1,
-                            "from": fro,
-                            "to": to,
-                            "d": shortest_path(csr, directed=False, indices=fro)[to],
-                        },
-                        index=[pp_seg.shape[0] + 1],
-                    )
+                pp_seg = pd.concat(
+                    [
+                        pp_seg,
+                        pd.DataFrame(
+                            {
+                                "n": pp_seg.shape[0] + 1,
+                                "from": fro,
+                                "to": to,
+                                "d": shortest_path(csr, directed=False, indices=fro)[
+                                    to
+                                ],
+                            },
+                            index=[pp_seg.shape[0] + 1],
+                        ),
+                    ],
+                    ignore_index=True,
                 )
 
         pp_seg["n"] = pp_seg["n"].astype(int).astype(str)
