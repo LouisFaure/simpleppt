@@ -16,9 +16,10 @@ def process_R_gpu(R, sigma):
 def norm_R_gpu(R, Rsum):
     x, y = cuda.grid(2)
     if x < R.shape[0] and y < R.shape[1]:
-        R[x, y] = R[x, y] / Rsum[x]
-        if math.isnan(R[x, y]):
+        if Rsum[x] == 0:
             R[x, y] = 0
+        else:
+            R[x, y] = R[x, y] / Rsum[x]
 
 
 @cuda.jit
@@ -55,8 +56,8 @@ def cor_mat_cpu(A, B):
     A1 = A - A.mean(axis=0)
     B1 = B - B.mean(axis=0)
     res = (B1.T.dot(A1)).T / np.sqrt(
-        (A1 ** 2).sum(axis=0).reshape(A1.shape[1], 1)
-        @ (B1 ** 2).sum(axis=0).reshape(1, B1.shape[1])
+        (A1**2).sum(axis=0).reshape(A1.shape[1], 1)
+        @ (B1**2).sum(axis=0).reshape(1, B1.shape[1])
     )
     return res.T
 
@@ -67,8 +68,8 @@ def cor_mat_gpu(A, B):
     A1 = A - A.mean(axis=0)
     B1 = B - B.mean(axis=0)
     res = (B1.T.dot(A1)).T / cp.sqrt(
-        (A1 ** 2).sum(axis=0).reshape(A1.shape[1], 1)
-        @ (B1 ** 2).sum(axis=0).reshape(1, B1.shape[1])
+        (A1**2).sum(axis=0).reshape(A1.shape[1], 1)
+        @ (B1**2).sum(axis=0).reshape(1, B1.shape[1])
     )
     return res.T
 
@@ -77,8 +78,8 @@ def mst_gpu(d):
     import numpy as np
     import cudf
     import cupy as cp
-    from cupyx.scipy.sparse.csr import csr_matrix as csr_cupy
-    from cupyx.scipy.sparse.coo import coo_matrix
+    from cupyx.scipy.sparse import csr_matrix as csr_cupy
+    from cupyx.scipy.sparse import coo_matrix
     from cugraph.tree.minimum_spanning_tree_wrapper import mst_double, mst_float
     import scipy
 
