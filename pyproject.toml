@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools-git-versioning>=2.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simpleppt"
+dynamic = ["version"]
+description = "Python implementation of SimplePPT algorithm, with GPU acceleration"
+readme = "README.md"
+authors = [
+    {name = "Louis Faure"},
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numba>=0.51.2",
+    "tqdm>=4.45.0",
+    "scipy>=1.4.1",
+    "pandas>=1.1.1",
+    "numpy>=1.18.1",
+    "matplotlib>=3.2.1",
+    "python-igraph>=0.8.2",
+    "scikit-learn",
+]
+
+[project.urls]
+Homepage = "https://github.com/LouisFaure/SimplePPT"
+
+[tool.setuptools-git-versioning]
+enabled = true
+template = "{tag}"
+dev_template = "{tag}"
+dirty_template = "{tag}"
+
+[tool.setuptools.packages.find]
+include = ["simpleppt*"]
+
+[tool.setuptools.package-data]
+simpleppt = ["data/*.csv"]

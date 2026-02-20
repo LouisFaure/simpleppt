@@ -1,8 +1,0 @@
-numba>=0.51.2
-tqdm>=4.45.0
-scipy>=1.4.1
-pandas>=1.1.1
-numpy>=1.18.1
-matplotlib>=3.2.1
-python_igraph>=0.8.2
-scikit_learn
