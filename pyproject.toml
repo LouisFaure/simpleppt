@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools-git-versioning>=2.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
 [project]
 name = "simpleppt"
@@ -25,14 +25,14 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/LouisFaure/SimplePPT"
 
-[tool.setuptools-git-versioning]
-enabled = true
-template = "{tag}"
-dev_template = "{tag}"
-dirty_template = "{tag}"
+[tool.hatch.version]
+source = "vcs"
 
-[tool.setuptools.packages.find]
-include = ["simpleppt*"]
+[tool.hatch.build.hooks.vcs]
+version-file = "simpleppt/_version.py"
 
-[tool.setuptools.package-data]
-simpleppt = ["data/*.csv"]
+[tool.hatch.build.targets.wheel]
+packages = ["simpleppt"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/simpleppt"]

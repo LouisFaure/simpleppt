@@ -28,7 +28,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 sys.path.insert(0, f"{HERE.parent}")
 
-import simpleppt
+from importlib.metadata import version as get_version
 
 
 # -- Project information -----------------------------------------------------
@@ -38,7 +38,7 @@ author = "Louis Faure"
 copyright = f"{datetime.now():%Y}, {author}"
 
 
-version = simpleppt.__version__
+version = get_version("simpleppt").replace(".dirty", "")
 # The full version, including alpha/beta/rc tags.
 release = version
 
